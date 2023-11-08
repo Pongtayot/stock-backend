@@ -1,0 +1,82 @@
+server:
+  port: 1150
+
+app:
+  upload:
+    path: images
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 512KB
+      max-request-size: 512KB
+
+logging:
+  file:
+    path: ./logs
+    name: ${logging.file.path}/spring-boot-logger.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${logging.file.path}/archived/spring-boot-logger-%d{yyyy-MM-dd}.%i.log
+      max-file-size: 10MB
+  level:
+    root: info
+
+---
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Product
+    username: postgres
+    password: Non1234!
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:pongtayot
+    username: sa
+    password: Non1234!
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Product
+    username: postgres
+    password: Non1234!
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 1111
+
+
